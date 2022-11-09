@@ -1,6 +1,4 @@
 /** Textual markov chain generator */
-const fs = require('fs');
-const process = require('process');
 
 class MarkovMachine {
 
@@ -46,12 +44,33 @@ class MarkovMachine {
   /** return random text from chains */
 
   makeText(numWords = 100) {
+    let newPhraseArr = [];
+
+    // randomly selects first word
     let arrOfKeys = Object.keys(this.obj);
     let randomIdx = Math.floor(Math.random() * arrOfKeys.length);
     let startingWord = arrOfKeys[randomIdx];
 
+    newPhraseArr.push(startingWord);
+    console.log(newPhraseArr);
 
-    console.log(startingWord);
+    // randomly selects a nextWord from the list of possible words that follow
+    // adds this word to the newPhraseArr and checks if this word === null. If so, the loop stops
+    // if not, this loop continues until the new phrase length equals the numWords param passed in
+    for (let i = 1; i <= numWords; i++) {
+      let priorWord = newPhraseArr[i-1];
+
+      let nextPossibleWords = this.obj[priorWord];
+      let randomIdx2 = Math.floor(Math.random() * nextPossibleWords.length);
+      let nextWord = nextPossibleWords[randomIdx2];
+
+      newPhraseArr.push(nextWord);
+      
+      if (nextWord === null) {
+        break
+      }
+    }
+    console.log(newPhraseArr.join(' '));
   }
 }
 
