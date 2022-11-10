@@ -6,7 +6,7 @@ class MarkovMachine {
 
   constructor(text) {
     let words = text.split(/[ \r\n]+/);
-    this.wordsArr = words.filter(c => c !== "");
+    this.words = words.filter(c => c !== "");
     this.obj = {};
     this.makeChains();
     this.makeText();
@@ -18,28 +18,27 @@ class MarkovMachine {
    *  {"the": ["cat", "hat"], "cat": ["in"], "in": ["the"], "hat": [null]} */
 
   makeChains() {
-    // adds each unique word in text as a key in this.obj object
-    this.wordsArr.forEach(word => {
+   // adds each unique word in text as a key in this.obj object
+    this.words.forEach(word => {
       this.obj[word] = []
     });
 
     // starting at the 2nd word in the text, this loop pushes the currentWord
     // into the this.obj as a value using the prior word as the key
-    for (let i = 1; i < this.wordsArr.length; i++) {
+    for (let i = 1; i < this.words.length; i++) {
       let priorIdx = i - 1;
-      let priorWord = this.wordsArr[priorIdx];
-      let currentWord = this.wordsArr[i];
+      let priorWord = this.words[priorIdx];
+      let currentWord = this.words[i];
     
       this.obj[priorWord].push(currentWord);
     }
 
     // pushes 'null' as value for the last word of text, since no words follow the last word
-    const lastWord = this.wordsArr[this.wordsArr.length-1]
+    const lastWord = this.words[this.words.length-1]
     this.obj[lastWord].push(null);
 
-    console.log(this.obj);
+    return(this.obj);
   }
-
 
   /** return random text from chains */
 
@@ -52,7 +51,6 @@ class MarkovMachine {
     let startingWord = arrOfKeys[randomIdx];
 
     newPhraseArr.push(startingWord);
-    console.log(newPhraseArr);
 
     // randomly selects a nextWord from the list of possible words that follow
     // adds this word to the newPhraseArr and checks if this word === null. If so, the loop stops
@@ -70,8 +68,11 @@ class MarkovMachine {
         break
       }
     }
-    console.log(newPhraseArr.join(' '));
+    return(newPhraseArr.join(' '));
   }
 }
 
-let mm = new MarkovMachine("the cat in the hat is in the hat");
+
+module.exports = {
+  MarkovMachine,
+};
