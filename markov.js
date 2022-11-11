@@ -72,7 +72,6 @@ class MarkovMachine {
   }
 }
 
-
 module.exports = {
-  MarkovMachine,
+  MarkovMachine
 };
